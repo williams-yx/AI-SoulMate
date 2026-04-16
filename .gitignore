@@ -1,0 +1,118 @@
+# ==========================================
+# 1. 核心忽略规则 (AI SoulMate 专属)
+# ==========================================
+# 数据库存储目录 (PostgreSQL Docker 挂载等)
+# 忽略文件夹下的所有内容，但保留文件夹本身
+uploads/*
+!uploads/.gitkeep
+
+data/*
+!data/.gitkeep
+# 日志文件 (包括所有的 .log 结尾以及 logs 专用文件夹)
+*.log
+logs/
+backend/logs/
+
+# ==========================================
+# 2. Python 后端相关 (FastAPI)
+# ==========================================
+# 字节码与缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 虚拟环境
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# 依赖打包
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# 测试与覆盖率
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# ==========================================
+# 3. 前端 Node.js / Vue 相关
+# ==========================================
+# 依赖包
+node_modules/
+jspm_packages/
+
+# 生产级编译输出目录
+dist/
+dist-ssr/
+frontend-vue/dist/
+
+# NPM/Yarn 缓存和日志
+.npm
+.yarn
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 环境变量 (保护本地机密)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env.server.local
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa
+id_ed25519
+
+# 本地回归/重置脚本 (不提交到仓库)
+reset_users_for_regression.py
+
+# ==========================================
+# 4. 操作系统与 IDE 相关
+# ==========================================
+# Windows 缩略图缓存等
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# MacOS 系统缓存
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# 编辑器与 IDE
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+.history/
+
+external-tools/
+external-tools.zip
+.env.server.local.example
+.env.example

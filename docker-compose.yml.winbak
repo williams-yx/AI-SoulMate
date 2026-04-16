@@ -1,0 +1,145 @@
+version: '3.8'
+
+services:
+  # Database Service (PostgreSQL)
+  db:
+    # Use inline build to tag the image as ml-postgres:15 for consistency
+    build:
+      context: .
+      dockerfile_inline: "FROM postgres:15"
+    image: ml-postgres:15
+    container_name: ml-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ai_soulmate
+    ports:
+      - "5432:5432"
+    volumes:
+      # Linux Compatibility: Use named volumes to avoid permission issues with bind mounts (HOST_PATH:CONTAINER_PATH)
+      # Bind mounts like './data/postgres' often cause permission denied errors on Linux if UIDs don't match.
+      - postgres_data:/var/lib/postgresql/data
+      # Mount init sql files for fresh database initialization
+      - ./00_init_schema.sql:/docker-entrypoint-initdb.d/00_init_schema.sql
+      - ./01_init_data.sql:/docker-entrypoint-initdb.d/01_init_data.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Service
+  redis:
+    # Use inline build to tag the image as ml-redis:7-alpine for consistency
+    build:
+      context: .
+      dockerfile_inline: "FROM redis:7-alpine"
+    image: ml-redis:7-alpine
+    container_name: ml-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      # Linux Compatibility: Use named volume
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend Service (FastAPI)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ml-backend:latest
+    container_name: ml-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    # 注入项目根目录 .env（SMTP / GitHub / 阿里云短信等），便于容器内读取
+    env_file:
+      - .env
+    environment:
+      # Database connection
+      DATABASE_URL: postgresql://postgres:password@db:5432/ai_soulmate
+      REDIS_URL: redis://redis:6379/0
+      # Windows/Docker 下 bind mount 文件变更不触发 inotify，用轮询让 --reload 生效
+      WATCHFILES_FORCE_POLLING: "true"
+
+      # App settings (ensure these match your config.py defaults or override as needed)
+      SECRET_KEY: your-secret-key-here-change-in-production
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      UPLOAD_DIR: /app/uploads
+
+      # Stripe Payment Configuration
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY:-}
+
+      # Alipay Payment Configuration (沙箱环境)
+      ALIPAY_APP_ID: "${ALIPAY_APP_ID:-}"
+      ALIPAY_PRIVATE_KEY: "${ALIPAY_PRIVATE_KEY:-}"
+      ALIPAY_PUBLIC_KEY: "${ALIPAY_PUBLIC_KEY:-}"
+      ALIPAY_SANDBOX: "true"
+      # 支付宝回调地址（需要配置为服务器公网地址）
+      # 本地开发: http://localhost:8080/orders/{order_id}
+      # 服务器部署: http://your-server-ip:8080/orders/{order_id}
+      ALIPAY_RETURN_URL: "http://localhost:8080/orders"
+      ALIPAY_NOTIFY_URL: "http://localhost:3000/api/payments/alipay/notify"
+      
+      # 前端地址（用于支付成功后跳转）
+      FRONTEND_URL: "http://localhost:8080"
+      
+      # External AI API Constants
+      # HUNYUAN3D_API_KEY: ...
+      # ALIYUN_BAILIAN_API_KEY: ...
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      # Code bind mount works fine on Linux for development
+      - ./backend:/app
+      - ./uploads:/app/uploads
+    # 'reload' is useful for dev. For production, remove --reload.
+    command: uvicorn main:app --host 0.0.0.0 --port 3000 --reload
+
+  # Frontend Service (Vue 3 + Vite)
+  frontend:
+    build:
+      context: ./frontend-vue
+      dockerfile: Dockerfile
+    image: ml-frontend:latest
+    container_name: ml-frontend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Vite server config
+      HOST: "0.0.0.0"
+      PORT: "8080"
+      # Proxy target for API calls
+      VITE_API_TARGET: "http://backend:3000"
+    volumes:
+      - ./frontend-vue:/app
+      # Anonymous volume for node_modules to prevent host overwriting container modules
+      - /app/node_modules
+    depends_on:
+      - backend
+    # Verify command matches package.json dev script
+    command: npm run dev
+
+# Named volumes are managed by Docker and store data in /var/lib/docker/volumes on Linux.
+# This avoids permission issues common with bind mounts on Linux filesystems.
+volumes:
+  postgres_data:
+  redis_data:
+
+
+networks:
+  default:
+    name: ml-network

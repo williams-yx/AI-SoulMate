@@ -1,0 +1,145 @@
+services:
+  # Database Service (PostgreSQL) - 已迁移到阿里云 RDS，本地服务已禁用
+  # db:
+  #   build:
+  #     context: .
+  #     dockerfile_inline: "FROM postgres:15"
+  #   image: ml-postgres:15
+  #   container_name: ml-db
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: ai_soulmate
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./00_init_schema.sql:/docker-entrypoint-initdb.d/00_init_schema.sql
+  #     - ./01_init_data.sql:/docker-entrypoint-initdb.d/01_init_data.sql
+  #   healthcheck:
+  #     test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  # Backend Service (FastAPI)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ml-backend:latest
+    container_name: ml-backend
+    restart: unless-stopped
+    expose:
+      - "3000"
+    # 注入项目根目录 .env（SMTP / GitHub / 阿里云短信等），便于容器内读取
+    env_file:
+      - .env
+    environment:
+      # Database connection variables are now injected via .env file
+
+      # App settings (ensure these match your config.py defaults or override as needed)
+      SECRET_KEY: your-secret-key-here-change-in-production
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 1440
+      UPLOAD_DIR: /app/uploads
+
+      # Stripe Payment Configuration
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY:-}
+
+      # Alipay Payment Configuration (沙箱环境)
+      ALIPAY_APP_ID: "${ALIPAY_APP_ID:-}"
+      ALIPAY_PRIVATE_KEY: "${ALIPAY_PRIVATE_KEY:-}"
+      ALIPAY_PUBLIC_KEY: "${ALIPAY_PUBLIC_KEY:-}"
+      ALIPAY_SANDBOX: "true"
+      # 支付宝回调地址（需要配置为服务器公网地址）
+      # 本地开发: http://localhost:8080/orders/{order_id}
+      # 服务器部署: http://your-server-ip:8080/orders/{order_id}
+      ALIPAY_RETURN_URL: "${PUBLIC_BASE_URL:-http://59.110.238.204:8080}/orders"
+      ALIPAY_NOTIFY_URL: "${PUBLIC_BASE_URL:-http://59.110.238.204:8080}/api/payments/alipay/notify"
+
+      # 前端地址（用于支付成功后跳转）
+      FRONTEND_URL: "${PUBLIC_BASE_URL:-http://59.110.238.204:8080}"
+      # External AI API Constants
+      # HUNYUAN3D_API_KEY: ...
+      # ALIYUN_BAILIAN_API_KEY: ...
+      # depends_on:  # 已移除本地数据库依赖，使用阿里云 RDS
+      #   db:
+      #     condition: service_healthy
+    volumes:
+      # Code bind mount works fine on Linux for development
+      - ./backend:/app
+      - ./uploads:/app/uploads
+
+      # 外部工具独立目录（只读挂载，路径从 backend/bin 迁移至此）
+      # 容器内访问路径: /app/external-tools/bin/<binary>
+      - ./external-tools:/app/external-tools:ro
+
+      # 挂载 Docker Socket 工作流动态节点
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    # 为避免热重载导致短暂 500/空响应，这里关闭 --reload（需要改代码时手动重启容器）。
+    command: uvicorn main:app --host 0.0.0.0 --port 3000
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request,sys; sys.exit(0) if urllib.request.urlopen('http://localhost:3000/api/health', timeout=3).getcode()==200 else sys.exit(1)",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  # Frontend Service (Vue 3 + Vite)
+  frontend:
+    build:
+      context: ./frontend-vue
+      dockerfile: Dockerfile
+    image: ml-frontend:latest
+    container_name: ml-frontend
+    restart: unless-stopped
+    expose:
+      - "8080"
+    environment:
+      # Vite server config
+      HOST: "0.0.0.0"
+      PORT: "8080"
+      # Proxy target for API calls
+      VITE_API_TARGET: "http://backend:3000"
+    volumes:
+      - ./frontend-vue:/app
+      # Anonymous volume for node_modules to prevent host overwriting container modules
+      - /app/node_modules
+    depends_on:
+      backend:
+        condition: service_healthy
+    # Verify command matches package.json dev script
+    command: sh -c "echo 'Cleaning node_modules...' && rm -rf /app/node_modules/* /app/node_modules/.??* 2>/dev/null; npm install --include=dev && npm run dev"
+
+  nginx:
+    image: docker.m.daocloud.io/library/nginx:1.27-alpine
+    container_name: ml-nginx
+    restart: unless-stopped
+    ports:
+      - "${NGINX_PORT:-8080}:80"
+    volumes:
+      - ./deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_started
+
+# Named volumes are managed by Docker and store data in /var/lib/docker/volumes on Linux.
+# This avoids permission issues common with bind mounts on Linux filesystems.
+volumes:
+  postgres_data:
+
+
+networks:
+  default:
+    name: ml-network

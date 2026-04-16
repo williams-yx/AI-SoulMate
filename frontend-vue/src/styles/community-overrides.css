@@ -1,0 +1,157 @@
+:root {
+  --community-detail-fs-title: 32px;
+  --community-detail-fs-subtitle: 22px;
+  --community-detail-fs-body: 19px;
+  --community-detail-fs-meta: 17px;
+  --community-detail-fs-action: 18px;
+  --community-detail-fs-note: 16px;
+}
+
+/* 详情页主标题 */
+.asset-detail-title,
+.post-detail-title {
+  font-size: var(--community-detail-fs-title) !important;
+  line-height: 1.3 !important;
+}
+
+/* 评论区标题 */
+.comment-section-title,
+.post-comment-title {
+  font-size: var(--community-detail-fs-subtitle) !important;
+  line-height: 1.4 !important;
+}
+
+/* 作者、正文、提示词、评论内容等主体文字 */
+.asset-author,
+.post-author-name,
+.post-content-label,
+.post-content-text,
+.asset-prompt-label,
+.asset-prompt-content,
+.comment-text,
+.post-comment-content,
+.comment-author,
+.post-comment-author,
+.comment-login-prompt,
+.comment-login-link,
+.comment-sort-btn,
+.comment-sort-label,
+.comment-sort-actions,
+.asset-stat-value,
+.post-stat-value,
+.post-preview-title,
+.post-media-group-title,
+.post-model-link {
+  font-size: var(--community-detail-fs-body) !important;
+  line-height: 1.7 !important;
+}
+
+/* 时间、说明等次级信息 */
+.asset-published,
+.post-author-time,
+.comment-time,
+.post-comment-time,
+.comment-image-hint,
+.post-comment-hint,
+.post-empty-media,
+.post-comment-loading,
+.post-comment-empty {
+  font-size: var(--community-detail-fs-meta) !important;
+  line-height: 1.6 !important;
+}
+
+/* 交互按钮 */
+.asset-action-btn,
+.asset-action-btn-primary,
+.asset-action-btn-print,
+.btn-image-select,
+.btn-image-select-sm,
+.btn-publish,
+.post-comment-submit,
+.post-comment-tool-btn,
+.comment-action-btn,
+.asset-back-btn,
+.post-back-btn,
+.post-delete-btn,
+.asset-delete-btn {
+  font-size: var(--community-detail-fs-action) !important;
+}
+
+/* 3D 提示文字 */
+.asset-3d-hint-pill {
+  font-size: 16px !important;
+  padding: 10px 14px !important;
+}
+
+/* 输入区与文本框 */
+.comment-input-area,
+.post-comment-input-wrap,
+.comment-textarea,
+.post-comment-textarea {
+  font-size: var(--community-detail-fs-body) !important;
+}
+
+.comment-empty {
+  font-size: 18px !important;
+  color: #cbd5e1 !important;
+}
+
+/* 详情页关键位置：提高优先级，覆盖 scoped 样式 */
+.asset-detail-container .asset-back-btn,
+.post-detail-container .post-back-btn,
+.asset-detail-container .asset-author,
+.post-detail-container .post-author-name,
+.post-detail-container .post-author-time {
+  font-size: var(--community-detail-fs-action) !important;
+}
+
+.asset-detail-container .asset-published,
+.asset-detail-container .comment-image-hint,
+.post-detail-container .comment-image-hint {
+  font-size: var(--community-detail-fs-meta) !important;
+}
+
+.asset-detail-container .asset-stat-badge .asset-stat-value,
+.post-detail-container .post-stat-value {
+  font-size: var(--community-detail-fs-body) !important;
+}
+
+/* 屏幕适配：平板 */
+@media (max-width: 1024px) {
+  :root {
+    --community-detail-fs-title: 30px;
+    --community-detail-fs-subtitle: 20px;
+    --community-detail-fs-body: 17px;
+    --community-detail-fs-meta: 15px;
+    --community-detail-fs-action: 16px;
+    --community-detail-fs-note: 14px;
+  }
+}
+
+/* 屏幕适配：手机 */
+@media (max-width: 768px) {
+  :root {
+    --community-detail-fs-title: 28px;
+    --community-detail-fs-subtitle: 19px;
+    --community-detail-fs-body: 16px;
+    --community-detail-fs-meta: 14px;
+    --community-detail-fs-action: 15px;
+    --community-detail-fs-note: 13px;
+  }
+
+  .asset-info-header,
+  .post-info-header {
+    gap: 12px !important;
+  }
+
+  .asset-info-actions,
+  .post-header-actions {
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .comment-input-actions,
+  .comment-reply-input-actions {
+    gap: 10px !important;
+  }
+}

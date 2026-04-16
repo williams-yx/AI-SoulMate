@@ -1,0 +1,1492 @@
+commit c7ef6b110f73f262ccefa1415de05ec618ca3fcb
+Merge: f4291e1 75c2a09
+Author: xpp <3273161867@qq.com>
+Date:   Sun Feb 22 13:26:01 2026 +0800
+
+    合并develop4
+
+commit f4291e1bcf5b8e6d7e0ae9220bc943fadb407be0
+Author: xpp <3273161867@qq.com>
+Date:   Sun Feb 22 13:16:16 2026 +0800
+
+    合并develop3完毕
+
+diff --git a/frontend-vue/src/views/StudioPage.vue b/frontend-vue/src/views/StudioPage.vue
+index dce691b..c7c59ac 100644
+--- a/frontend-vue/src/views/StudioPage.vue
++++ b/frontend-vue/src/views/StudioPage.vue
+@@ -167,7 +167,6 @@
+             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+           </template>
+ 
+           <!-- 文生3D / 图转3D：显示3D模型 -->
+           <template v-else>
+             <div
+@@ -177,12 +176,6 @@
+             ></div>
+             <img
+               v-else-if="resultImg"
+-          <!-- 文生3D / 图转3D：显示3D模型预览 -->
+-          <template v-else>
+-            <img
+-              v-if="resultImg"
+               :src="resultImg"
+               class="w-full h-full object-contain bg-slate-900"
+               alt="3D模型预览图"
+@@ -192,11 +185,7 @@
+               v-else
+               class="flex-1 flex items-center justify-center text-slate-400"
+             >
+-<<<<<<< HEAD
+               <p>{{ resultUrl ? '3D模型加载失败，已回退预览图' : '等待生成3D模型预览...' }}</p>
+-=======
+-              <p>等待生成3D模型预览...</p>
+->>>>>>> origin/develop3
+             </div>
+             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-50 group-hover:opacity-100 transition pointer-events-none"></div>
+           </template>
+@@ -255,7 +244,6 @@
+         <!-- 底部提示信息 -->
+         <div class="p-4 border-t border-slate-700 text-sm text-slate-300 flex items-center justify-between flex-wrap gap-2">
+           <div>
+-<<<<<<< HEAD
+             <template v-if="mode === 'image23d'">
+               <span class="flex items-center gap-2" v-if="uploadedImage">
+                 图片：
+@@ -270,10 +258,6 @@
+             <template v-else>
+               <span v-if="prompt">提示词：<span class="text-slate-400">{{ prompt }}</span></span>
+             </template>
+-=======
+-            <span v-if="mode === 'image23d' && uploadedFileName">上传图片：{{ uploadedFileName }} | </span>
+-            <span v-if="prompt">提示词：<span class="text-slate-400">{{ prompt }}</span></span>
+->>>>>>> origin/develop3
+           </div>
+           <div v-if="creditsUsed != null" class="text-emerald-300">消耗：{{ creditsUsed }} 积分</div>
+         </div>
+@@ -292,18 +276,11 @@
+ </template>
+ 
+ <script setup lang="ts">
+-<<<<<<< HEAD
+ import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+ import { useRoute } from 'vue-router'
+ import { api } from '../lib/api'
+ import { useAuthStore } from '../stores/auth'
+ import * as OV from 'online-3d-viewer'
+-=======
+-import { onMounted, ref, watch } from 'vue'
+-import { useRoute } from 'vue-router'
+-import { api } from '../lib/api'
+-import { useAuthStore } from '../stores/auth'
+->>>>>>> origin/develop3
+ 
+ declare const lucide: any
+ 
+@@ -312,7 +289,6 @@ const auth = useAuthStore()
+ 
+ // 模式：text2image（文生图）、text23d（文生3D）、image23d（图转3D）
+ const mode = ref<'text2image' | 'text23d' | 'image23d'>('text23d')
+-<<<<<<< HEAD
+ const viewerContainer = ref<HTMLElement | null>(null)
+ const viewerLoadFailed = ref(false)
+ let embeddedViewer: any = null
+@@ -326,8 +302,6 @@ const assetId = ref<string | null>(null)
+ const published = ref(false)
+ const msg = ref('')
+ const msgType = ref<'ok' | 'error'>('ok')
+-=======
+->>>>>>> origin/develop3
+ 
+ // 从 URL 参数读取模式
+ onMounted(() => {
+@@ -336,23 +310,17 @@ onMounted(() => {
+     mode.value = modeParam
+   }
+   renderIcons()
+-<<<<<<< HEAD
+   window.addEventListener('resize', resizeEmbeddedViewer)
+ })
+ 
+ onBeforeUnmount(() => {
+   window.removeEventListener('resize', resizeEmbeddedViewer)
+   destroyEmbeddedViewer()
+-=======
+->>>>>>> origin/develop3
+ })
+ 
+ watch(mode, () => {
+   renderIcons()
+-<<<<<<< HEAD
+   destroyEmbeddedViewer()
+-=======
+->>>>>>> origin/develop3
+   // 切换模式时重置状态
+   view.value = 'empty'
+   resultImg.value = ''
+@@ -360,7 +328,6 @@ watch(mode, () => {
+   assetId.value = null
+   published.value = false
+   creditsUsed.value = null
+-<<<<<<< HEAD
+   viewerLoadFailed.value = false
+ })
+ 
+@@ -371,8 +338,6 @@ watch([mode, view, resultUrl], async () => {
+     return
+   }
+   await mountEmbeddedViewer(resultUrl.value)
+-=======
+->>>>>>> origin/develop3
+ })
+ 
+ function renderIcons() {
+@@ -381,7 +346,6 @@ function renderIcons() {
+   }
+ }
+ 
+-<<<<<<< HEAD
+ function destroyEmbeddedViewer() {
+   clearViewerLoadTimer()
+   if (embeddedViewer && typeof embeddedViewer.Destroy === 'function') {
+@@ -474,9 +438,6 @@ async function mountEmbeddedViewer(modelUrl: string) {
+   }, 20000)
+   resizeEmbeddedViewer()
+ }
+-
+-=======
+->>>>>>> origin/develop3
+ const lang = ref<'cn' | 'en'>('cn')
+ const promptCn = '一只穿着宇航服的柴犬，4k画质'
+ const promptEn = 'A Shiba Inu in a spacesuit, 4k'
+@@ -487,20 +448,7 @@ const fileInput = ref<HTMLInputElement | null>(null)
+ const uploadedImage = ref<string | null>(null)
+ const uploadedFileName = ref<string>('')
+ 
+-<<<<<<< HEAD
+-=======
+-const view = ref<'empty' | 'loading' | 'result'>('empty')
+-const loading = ref(false)
+-const creditsUsed = ref<number | null>(null)
+-const resultUrl = ref<string | null>(null)
+-const resultImg = ref('')
+-const assetId = ref<string | null>(null)
+-const published = ref(false)
+-
+-const msg = ref('')
+-const msgType = ref<'ok' | 'error'>('ok')
+ 
+->>>>>>> origin/develop3
+ function toastOk(t: string) {
+   msgType.value = 'ok'
+   msg.value = t
+@@ -571,10 +519,7 @@ async function generate() {
+   resultUrl.value = null
+   assetId.value = null
+   published.value = false
+-<<<<<<< HEAD
+   viewerLoadFailed.value = false
+-=======
+->>>>>>> origin/develop3
+ 
+   try {
+     if (mode.value === 'text2image') {
+
+commit 0fcf9e2db34b348e75efd66bc08b6ebd6be3d12e
+Author: xpp <3273161867@qq.com>
+Date:   Sun Feb 22 12:34:41 2026 +0800
+
+    合并develop3至develop1(2026-2-22)
+
+diff --git a/frontend-vue/src/views/StudioPage.vue b/frontend-vue/src/views/StudioPage.vue
+index 012117b..dce691b 100644
+--- a/frontend-vue/src/views/StudioPage.vue
++++ b/frontend-vue/src/views/StudioPage.vue
+@@ -167,6 +167,7 @@
+             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+           </template>
+ 
++<<<<<<< HEAD
+           <!-- 文生3D / 图转3D：显示3D模型 -->
+           <template v-else>
+             <div
+@@ -176,6 +177,12 @@
+             ></div>
+             <img
+               v-else-if="resultImg"
++=======
++          <!-- 文生3D / 图转3D：显示3D模型预览 -->
++          <template v-else>
++            <img
++              v-if="resultImg"
++>>>>>>> origin/develop3
+               :src="resultImg"
+               class="w-full h-full object-contain bg-slate-900"
+               alt="3D模型预览图"
+@@ -185,7 +192,11 @@
+               v-else
+               class="flex-1 flex items-center justify-center text-slate-400"
+             >
++<<<<<<< HEAD
+               <p>{{ resultUrl ? '3D模型加载失败，已回退预览图' : '等待生成3D模型预览...' }}</p>
++=======
++              <p>等待生成3D模型预览...</p>
++>>>>>>> origin/develop3
+             </div>
+             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-50 group-hover:opacity-100 transition pointer-events-none"></div>
+           </template>
+@@ -244,6 +255,7 @@
+         <!-- 底部提示信息 -->
+         <div class="p-4 border-t border-slate-700 text-sm text-slate-300 flex items-center justify-between flex-wrap gap-2">
+           <div>
++<<<<<<< HEAD
+             <template v-if="mode === 'image23d'">
+               <span class="flex items-center gap-2" v-if="uploadedImage">
+                 图片：
+@@ -258,6 +270,10 @@
+             <template v-else>
+               <span v-if="prompt">提示词：<span class="text-slate-400">{{ prompt }}</span></span>
+             </template>
++=======
++            <span v-if="mode === 'image23d' && uploadedFileName">上传图片：{{ uploadedFileName }} | </span>
++            <span v-if="prompt">提示词：<span class="text-slate-400">{{ prompt }}</span></span>
++>>>>>>> origin/develop3
+           </div>
+           <div v-if="creditsUsed != null" class="text-emerald-300">消耗：{{ creditsUsed }} 积分</div>
+         </div>
+@@ -276,11 +292,18 @@
+ </template>
+ 
+ <script setup lang="ts">
++<<<<<<< HEAD
+ import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+ import { useRoute } from 'vue-router'
+ import { api } from '../lib/api'
+ import { useAuthStore } from '../stores/auth'
+ import * as OV from 'online-3d-viewer'
++=======
++import { onMounted, ref, watch } from 'vue'
++import { useRoute } from 'vue-router'
++import { api } from '../lib/api'
++import { useAuthStore } from '../stores/auth'
++>>>>>>> origin/develop3
+ 
+ declare const lucide: any
+ 
+@@ -289,6 +312,7 @@ const auth = useAuthStore()
+ 
+ // 模式：text2image（文生图）、text23d（文生3D）、image23d（图转3D）
+ const mode = ref<'text2image' | 'text23d' | 'image23d'>('text23d')
++<<<<<<< HEAD
+ const viewerContainer = ref<HTMLElement | null>(null)
+ const viewerLoadFailed = ref(false)
+ let embeddedViewer: any = null
+@@ -302,6 +326,8 @@ const assetId = ref<string | null>(null)
+ const published = ref(false)
+ const msg = ref('')
+ const msgType = ref<'ok' | 'error'>('ok')
++=======
++>>>>>>> origin/develop3
+ 
+ // 从 URL 参数读取模式
+ onMounted(() => {
+@@ -310,17 +336,23 @@ onMounted(() => {
+     mode.value = modeParam
+   }
+   renderIcons()
++<<<<<<< HEAD
+   window.addEventListener('resize', resizeEmbeddedViewer)
+ })
+ 
+ onBeforeUnmount(() => {
+   window.removeEventListener('resize', resizeEmbeddedViewer)
+   destroyEmbeddedViewer()
++=======
++>>>>>>> origin/develop3
+ })
+ 
+ watch(mode, () => {
+   renderIcons()
++<<<<<<< HEAD
+   destroyEmbeddedViewer()
++=======
++>>>>>>> origin/develop3
+   // 切换模式时重置状态
+   view.value = 'empty'
+   resultImg.value = ''
+@@ -328,6 +360,7 @@ watch(mode, () => {
+   assetId.value = null
+   published.value = false
+   creditsUsed.value = null
++<<<<<<< HEAD
+   viewerLoadFailed.value = false
+ })
+ 
+@@ -338,6 +371,8 @@ watch([mode, view, resultUrl], async () => {
+     return
+   }
+   await mountEmbeddedViewer(resultUrl.value)
++=======
++>>>>>>> origin/develop3
+ })
+ 
+ function renderIcons() {
+@@ -346,6 +381,7 @@ function renderIcons() {
+   }
+ }
+ 
++<<<<<<< HEAD
+ function destroyEmbeddedViewer() {
+   clearViewerLoadTimer()
+   if (embeddedViewer && typeof embeddedViewer.Destroy === 'function') {
+@@ -439,6 +475,8 @@ async function mountEmbeddedViewer(modelUrl: string) {
+   resizeEmbeddedViewer()
+ }
+ 
++=======
++>>>>>>> origin/develop3
+ const lang = ref<'cn' | 'en'>('cn')
+ const promptCn = '一只穿着宇航服的柴犬，4k画质'
+ const promptEn = 'A Shiba Inu in a spacesuit, 4k'
+@@ -449,6 +487,20 @@ const fileInput = ref<HTMLInputElement | null>(null)
+ const uploadedImage = ref<string | null>(null)
+ const uploadedFileName = ref<string>('')
+ 
++<<<<<<< HEAD
++=======
++const view = ref<'empty' | 'loading' | 'result'>('empty')
++const loading = ref(false)
++const creditsUsed = ref<number | null>(null)
++const resultUrl = ref<string | null>(null)
++const resultImg = ref('')
++const assetId = ref<string | null>(null)
++const published = ref(false)
++
++const msg = ref('')
++const msgType = ref<'ok' | 'error'>('ok')
++
++>>>>>>> origin/develop3
+ function toastOk(t: string) {
+   msgType.value = 'ok'
+   msg.value = t
+@@ -519,7 +571,10 @@ async function generate() {
+   resultUrl.value = null
+   assetId.value = null
+   published.value = false
++<<<<<<< HEAD
+   viewerLoadFailed.value = false
++=======
++>>>>>>> origin/develop3
+ 
+   try {
+     if (mode.value === 'text2image') {
+
+commit 08752806e3093f3a74174ccae4b61ec4934ba9d7
+Author: Z-0111 <1991904398@qq.com>
+Date:   Sat Feb 21 11:05:42 2026 +0800
+
+    修改：3D打印添加混合下单模式
+
+diff --git a/frontend-vue/src/views/StudioPage.vue b/frontend-vue/src/views/StudioPage.vue
+index 494139a..77827db 100644
+--- a/frontend-vue/src/views/StudioPage.vue
++++ b/frontend-vue/src/views/StudioPage.vue
+@@ -328,21 +328,31 @@
+           </div>
+         </div>
+ 
+-        <div class="p-6 border-t border-slate-700 flex gap-3">
++        <div class="p-6 border-t border-slate-700 space-y-3">
+           <button
+-            class="flex-1 py-3 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-bold transition"
++            class="w-full py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition flex items-center justify-center gap-2"
+             type="button"
+-            @click="showPrintDialog = false"
++            :disabled="printBusy"
++            @click="confirmPrintOrder"
+           >
+-            取消
++            <i data-lucide="zap" class="w-4 h-4"></i>
++            {{ printBusy ? '创建中...' : '立即打印下单' }}
+           </button>
+           <button
+-            class="flex-1 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition"
++            class="w-full py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition flex items-center justify-center gap-2"
+             type="button"
+             :disabled="printBusy"
+-            @click="confirmPrintOrder"
++            @click="addToCart"
+           >
+-            {{ printBusy ? '创建中...' : '确认下单' }}
++            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
++            加入购物车
++          </button>
++          <button
++            class="w-full py-3 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold transition"
++            type="button"
++            @click="showPrintDialog = false"
++          >
++            取消
+           </button>
+         </div>
+       </div>
+@@ -355,12 +365,15 @@ import { onMounted, ref, watch, computed } from 'vue'
+ import { useRoute, useRouter } from 'vue-router'
+ import { api } from '../lib/api'
+ import { useAuthStore } from '../stores/auth'
++import { useCartStore } from '../stores/cart'
+ 
+ declare const lucide: any
+ 
+ const route = useRoute()
+ const router = useRouter()
+ const auth = useAuthStore()
++const cart = useCartStore()
++cart.hydrate()
+ 
+ // 模式：text2image（文生图）、text23d（文生3D）、image23d（图转3D）
+ const mode = ref<'text2image' | 'text23d' | 'image23d'>('text23d')
+@@ -620,6 +633,38 @@ async function confirmPrintOrder() {
+   }
+ }
+ 
++function addToCart() {
++  // 检查是否有asset_id
++  if (!assetId.value) {
++    toastErr('请先生成3D模型')
++    return
++  }
++
++  try {
++    // 构建商品名称
++    const productName = `定制白模（${printHeight.value}，${printMaterial.value}，${estimatedWeight.value}g）`
++    
++    // 加入购物车
++    cart.add(
++      {
++        id: `print:${assetId.value}:${printHeight.value}:${printMaterial.value}`,
++        name: productName,
++        price: estimatedPrice.value,
++        image: resultImg.value || ''
++      },
++      1
++    )
++
++    toastOk('已加入购物车')
++    showPrintDialog.value = false
++    
++    // 渲染图标
++    setTimeout(() => renderIcons(), 100)
++  } catch (e: any) {
++    toastErr(e?.message || '加入购物车失败')
++  }
++}
++
+ async function publishToCommunity() {
+   if (!assetId.value) return
+   try {
+
+commit 74a6be7945ef76c29abe6bfcb86bb35b64483ba9
+Author: Z-0111 <1991904398@qq.com>
+Date:   Fri Feb 20 21:03:27 2026 +0800
+
+    增加3D工作室添加打印并下单功能
+
+diff --git a/frontend-vue/src/views/StudioPage.vue b/frontend-vue/src/views/StudioPage.vue
+index 44f59a5..494139a 100644
+--- a/frontend-vue/src/views/StudioPage.vue
++++ b/frontend-vue/src/views/StudioPage.vue
+@@ -192,9 +192,9 @@
+               v-if="mode === 'text23d' || mode === 'image23d'"
+               class="bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-full font-bold shadow-lg flex justify-center transition transform hover:scale-105"
+               type="button"
+-              @click="printJob"
++              @click="showPrintDialog = true"
+             >
+-              打印
++              打印并下单
+             </button>
+ 
+             <!-- 发布到社区 -->
+@@ -255,18 +255,111 @@
+         </div>
+       </section>
+     </div>
++
++    <!-- 打印规格选择弹窗 -->
++    <div
++      v-if="showPrintDialog"
++      class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4"
++      @click.self="showPrintDialog = false"
++    >
++      <div class="glass-panel max-w-md w-full rounded-2xl border border-slate-700 overflow-hidden">
++        <div class="p-6 border-b border-slate-700 bg-slate-800/50 flex items-center justify-between">
++          <h3 class="font-bold text-lg">打印规格选择</h3>
++          <button
++            class="text-slate-400 hover:text-white"
++            type="button"
++            @click="showPrintDialog = false"
++          >
++            <i data-lucide="x" class="w-5 h-5"></i>
++          </button>
++        </div>
++
++        <div class="p-6 space-y-4">
++          <!-- 高度选择 -->
++          <div>
++            <label class="text-sm font-bold text-slate-300 mb-2 block">打印高度</label>
++            <div class="grid grid-cols-2 gap-3">
++              <button
++                class="py-3 px-4 rounded-lg border-2 transition font-bold"
++                :class="printHeight === '5cm' ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300' : 'border-slate-600 bg-slate-800 text-slate-300 hover:border-slate-500'"
++                type="button"
++                @click="printHeight = '5cm'"
++              >
++                5cm
++              </button>
++              <button
++                class="py-3 px-4 rounded-lg border-2 transition font-bold"
++                :class="printHeight === '10cm' ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300' : 'border-slate-600 bg-slate-800 text-slate-300 hover:border-slate-500'"
++                type="button"
++                @click="printHeight = '10cm'"
++              >
++                10cm
++              </button>
++            </div>
++          </div>
++
++          <!-- 材质选择 -->
++          <div>
++            <label class="text-sm font-bold text-slate-300 mb-2 block">打印材质</label>
++            <select v-model="printMaterial" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-200 focus:border-emerald-500 outline-none">
++              <option value="PLA">PLA（常规）</option>
++              <option value="ABS">ABS（耐用）</option>
++              <option value="PETG">PETG（韧性）</option>
++            </select>
++          </div>
++
++          <!-- 预估克重和价格 -->
++          <div class="bg-slate-900/50 rounded-lg p-4 space-y-2">
++            <div class="flex justify-between text-sm">
++              <span class="text-slate-400">预估克重：</span>
++              <span class="text-slate-200 font-bold">{{ estimatedWeight }}g</span>
++            </div>
++            <div class="flex justify-between text-sm">
++              <span class="text-slate-400">单价：</span>
++              <span class="text-slate-200 font-bold">2元/g</span>
++            </div>
++            <div class="flex justify-between border-t border-slate-700 pt-2 mt-2">
++              <span class="text-slate-300 font-bold">预估总价：</span>
++              <span class="text-emerald-300 font-bold text-lg">¥{{ estimatedPrice.toFixed(2) }}</span>
++            </div>
++            <p class="text-xs text-slate-500 mt-2">
++              * 实际价格以打印完成后的实际克重为准
++            </p>
++          </div>
++        </div>
++
++        <div class="p-6 border-t border-slate-700 flex gap-3">
++          <button
++            class="flex-1 py-3 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-bold transition"
++            type="button"
++            @click="showPrintDialog = false"
++          >
++            取消
++          </button>
++          <button
++            class="flex-1 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition"
++            type="button"
++            :disabled="printBusy"
++            @click="confirmPrintOrder"
++          >
++            {{ printBusy ? '创建中...' : '确认下单' }}
++          </button>
++        </div>
++      </div>
++    </div>
+   </div>
+ </template>
+ 
+ <script setup lang="ts">
+-import { onMounted, ref, watch } from 'vue'
+-import { useRoute } from 'vue-router'
++import { onMounted, ref, watch, computed } from 'vue'
++import { useRoute, useRouter } from 'vue-router'
+ import { api } from '../lib/api'
+ import { useAuthStore } from '../stores/auth'
+ 
+ declare const lucide: any
+ 
+ const route = useRoute()
++const router = useRouter()
+ const auth = useAuthStore()
+ 
+ // 模式：text2image（文生图）、text23d（文生3D）、image23d（图转3D）
+@@ -292,12 +385,6 @@ watch(mode, () => {
+   creditsUsed.value = null
+ })
+ 
+-function renderIcons() {
+-  if (typeof lucide !== 'undefined' && lucide?.createIcons) {
+-    lucide.createIcons()
+-  }
+-}
+-
+ const lang = ref<'cn' | 'en'>('cn')
+ const promptCn = '一只穿着宇航服的柴犬，4k画质'
+ const promptEn = 'A Shiba Inu in a spacesuit, 4k'
+@@ -319,6 +406,35 @@ const published = ref(false)
+ const msg = ref('')
+ const msgType = ref<'ok' | 'error'>('ok')
+ 
++// 打印相关状态
++const showPrintDialog = ref(false)
++const printHeight = ref<'5cm' | '10cm'>('5cm')
++const printMaterial = ref('PLA')
++const printBusy = ref(false)
++
++// 预估克重（根据高度）
++const estimatedWeight = computed(() => {
++  return printHeight.value === '5cm' ? 80 : 160
++})
++
++// 监听打印对话框，渲染图标
++watch(showPrintDialog, (newVal) => {
++  if (newVal) {
++    setTimeout(() => renderIcons(), 100)
++  }
++})
++
++function renderIcons() {
++  if (typeof lucide !== 'undefined' && lucide?.createIcons) {
++    lucide.createIcons()
++  }
++}
++
++// 预估价格
++const estimatedPrice = computed(() => {
++  return estimatedWeight.value * 2.0
++})
++
+ function toastOk(t: string) {
+   msgType.value = 'ok'
+   msg.value = t
+@@ -467,6 +583,43 @@ function printJob() {
+   toastOk('已发送至打印队列（演示）')
+ }
+ 
++async function confirmPrintOrder() {
++  // 检查是否有asset_id
++  if (!assetId.value) {
++    toastErr('请先生成3D模型')
++    return
++  }
++
++  // 检查登录状态
++  auth.hydrate()
++  if (!auth.isAuthed) {
++    toastErr('请先登录')
++    return
++  }
++
++  printBusy.value = true
++  try {
++    const res = await api.printOrders.create({
++      asset_id: assetId.value,
++      height: printHeight.value,
++      material: printMaterial.value,
++      estimated_weight: estimatedWeight.value
++    })
++
++    toastOk(res.message || '打印订单创建成功！')
++    showPrintDialog.value = false
++
++    // 跳转到订单详情页
++    setTimeout(() => {
++      router.push(`/orders/${res.order_id}`)
++    }, 1500)
++  } catch (e: any) {
++    toastErr(e?.message || '创建打印订单失败')
++  } finally {
++    printBusy.value = false
++  }
++}
++
+ async function publishToCommunity() {
+   if (!assetId.value) return
+   try {
+
+commit 71d1c7e6f5a5c2f4526a8c5a820278d00025b27f
+Author: Sun <16655332+dzdadie@user.noreply.gitee.com>
+Date:   Fri Feb 20 10:03:28 2026 +0800
+
+    实现前端页面渲染3d模型
+
+diff --git a/frontend-vue/src/views/StudioPage.vue b/frontend-vue/src/views/StudioPage.vue
+index 9069a2f..012117b 100644
+--- a/frontend-vue/src/views/StudioPage.vue
++++ b/frontend-vue/src/views/StudioPage.vue
+@@ -167,10 +167,15 @@
+             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+           </template>
+ 
+-          <!-- 文生3D / 图转3D：显示3D模型预览 -->
++          <!-- 文生3D / 图转3D：显示3D模型 -->
+           <template v-else>
++            <div
++              v-if="resultUrl && !viewerLoadFailed"
++              ref="viewerContainer"
++              class="w-full h-full bg-slate-950"
++            ></div>
+             <img
+-              v-if="resultImg"
++              v-else-if="resultImg"
+               :src="resultImg"
+               class="w-full h-full object-contain bg-slate-900"
+               alt="3D模型预览图"
+@@ -180,7 +185,7 @@
+               v-else
+               class="flex-1 flex items-center justify-center text-slate-400"
+             >
+-              <p>等待生成3D模型预览...</p>
++              <p>{{ resultUrl ? '3D模型加载失败，已回退预览图' : '等待生成3D模型预览...' }}</p>
+             </div>
+             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-50 group-hover:opacity-100 transition pointer-events-none"></div>
+           </template>
+@@ -271,10 +276,11 @@
+ </template>
+ 
+ <script setup lang="ts">
+-import { onMounted, ref, watch } from 'vue'
++import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+ import { useRoute } from 'vue-router'
+ import { api } from '../lib/api'
+ import { useAuthStore } from '../stores/auth'
++import * as OV from 'online-3d-viewer'
+ 
+ declare const lucide: any
+ 
+@@ -283,6 +289,19 @@ const auth = useAuthStore()
+ 
+ // 模式：text2image（文生图）、text23d（文生3D）、image23d（图转3D）
+ const mode = ref<'text2image' | 'text23d' | 'image23d'>('text23d')
++const viewerContainer = ref<HTMLElement | null>(null)
++const viewerLoadFailed = ref(false)
++let embeddedViewer: any = null
++let viewerLoadTimer: number | null = null
++const view = ref<'empty' | 'loading' | 'result'>('empty')
++const loading = ref(false)
++const creditsUsed = ref<number | null>(null)
++const resultUrl = ref<string | null>(null)
++const resultImg = ref('')
++const assetId = ref<string | null>(null)
++const published = ref(false)
++const msg = ref('')
++const msgType = ref<'ok' | 'error'>('ok')
+ 
+ // 从 URL 参数读取模式
+ onMounted(() => {
+@@ -291,10 +310,17 @@ onMounted(() => {
+     mode.value = modeParam
+   }
+   renderIcons()
++  window.addEventListener('resize', resizeEmbeddedViewer)
++})
++
++onBeforeUnmount(() => {
++  window.removeEventListener('resize', resizeEmbeddedViewer)
++  destroyEmbeddedViewer()
+ })
+ 
+ watch(mode, () => {
+   renderIcons()
++  destroyEmbeddedViewer()
+   // 切换模式时重置状态
+   view.value = 'empty'
+   resultImg.value = ''
+@@ -302,6 +328,16 @@ watch(mode, () => {
+   assetId.value = null
+   published.value = false
+   creditsUsed.value = null
++  viewerLoadFailed.value = false
++})
++
++watch([mode, view, resultUrl], async () => {
++  const is3DMode = mode.value === 'text23d' || mode.value === 'image23d'
++  if (!is3DMode || view.value !== 'result' || !resultUrl.value) {
++    destroyEmbeddedViewer()
++    return
++  }
++  await mountEmbeddedViewer(resultUrl.value)
+ })
+ 
+ function renderIcons() {
+@@ -310,6 +346,99 @@ function renderIcons() {
+   }
+ }
+ 
++function destroyEmbeddedViewer() {
++  clearViewerLoadTimer()
++  if (embeddedViewer && typeof embeddedViewer.Destroy === 'function') {
++    embeddedViewer.Destroy()
++  }
++  embeddedViewer = null
++  if (viewerContainer.value) {
++    viewerContainer.value.innerHTML = ''
++  }
++}
++
++function resizeEmbeddedViewer() {
++  if (embeddedViewer && typeof embeddedViewer.Resize === 'function') {
++    embeddedViewer.Resize()
++  }
++}
++
++function clearViewerLoadTimer() {
++  if (viewerLoadTimer !== null) {
++    window.clearTimeout(viewerLoadTimer)
++    viewerLoadTimer = null
++  }
++}
++
++function applyViewerNeutralLift() {
++  try {
++    const coreViewer = embeddedViewer?.GetViewer?.()
++    const shadingModel = coreViewer?.shadingModel
++    if (!coreViewer || !shadingModel) return
++    if (shadingModel?.ambientLight) {
++      shadingModel.ambientLight.color.set(0x2a2a2a)
++      shadingModel.ambientLight.intensity = 2.2 * Math.PI
++    }
++    if (shadingModel?.directionalLight) {
++      shadingModel.directionalLight.color.set(0x979797)
++      shadingModel.directionalLight.intensity = 1.51 * Math.PI
++    }
++    if (coreViewer?.renderer) {
++      coreViewer.renderer.toneMappingExposure = 1.12
++    }
++    if (typeof coreViewer?.Render === 'function') {
++      coreViewer.Render()
++    }
++  } catch (e) {
++    console.warn('轻微提亮失败:', e)
++  }
++}
++
++async function mountEmbeddedViewer(modelUrl: string) {
++  await nextTick()
++  if (!viewerContainer.value) {
++    return
++  }
++
++  destroyEmbeddedViewer()
++  viewerLoadFailed.value = false
++
++  const viewerOptions: any = {
++    backgroundColor: new OV.RGBAColor(20, 30, 52, 255),
++    onModelLoaded: () => {
++      clearViewerLoadTimer()
++      viewerLoadFailed.value = false
++      applyViewerNeutralLift()
++      resizeEmbeddedViewer()
++    },
++    onModelLoadFailed: () => {
++      clearViewerLoadTimer()
++      destroyEmbeddedViewer()
++      viewerLoadFailed.value = true
++      toastErr('3D模型加载失败，已回退预览图')
++    }
++  }
++  embeddedViewer = new OV.EmbeddedViewer(viewerContainer.value, viewerOptions)
++
++  let modelFileName = 'model.glb'
++  try {
++    const fileName = new URL(modelUrl).pathname.split('/').filter(Boolean).pop()
++    if (fileName) {
++      modelFileName = fileName.includes('.') ? fileName : `${fileName}.glb`
++    }
++  } catch (e) {
++    console.warn('模型URL解析失败，使用默认文件名:', e)
++  }
++  const proxiedModelUrl = `/api/studio/model-proxy/${encodeURIComponent(modelFileName)}?url=${encodeURIComponent(modelUrl)}`
++  embeddedViewer.LoadModelFromUrlList([proxiedModelUrl])
++  viewerLoadTimer = window.setTimeout(() => {
++    destroyEmbeddedViewer()
++    viewerLoadFailed.value = true
++    toastErr('3D模型加载超时，已回退预览图')
++  }, 20000)
++  resizeEmbeddedViewer()
++}
++
+ const lang = ref<'cn' | 'en'>('cn')
+ const promptCn = '一只穿着宇航服的柴犬，4k画质'
+ const promptEn = 'A Shiba Inu in a spacesuit, 4k'
+@@ -320,17 +449,6 @@ const fileInput = ref<HTMLInputElement | null>(null)
+ const uploadedImage = ref<string | null>(null)
+ const uploadedFileName = ref<string>('')
+ 
+-const view = ref<'empty' | 'loading' | 'result'>('empty')
+-const loading = ref(false)
+-const creditsUsed = ref<number | null>(null)
+-const resultUrl = ref<string | null>(null)
+-const resultImg = ref('')
+-const assetId = ref<string | null>(null)
+-const published = ref(false)
+-
+-const msg = ref('')
+-const msgType = ref<'ok' | 'error'>('ok')
+-
+ function toastOk(t: string) {
+   msgType.value = 'ok'
+   msg.value = t
+@@ -401,6 +519,7 @@ async function generate() {
+   resultUrl.value = null
+   assetId.value = null
+   published.value = false
++  viewerLoadFailed.value = false
+ 
+   try {
+     if (mode.value === 'text2image') {
+
+commit d3c71834ca5f958804268a8d7e9878a98e5f812f
+Author: Sun <16655332+dzdadie@user.noreply.gitee.com>
+Date:   Wed Feb 18 21:10:04 2026 +0800
+
+    实现文生3d 图生3d以及修复出现的小bug相关功能
+
+diff --git a/frontend-vue/src/views/StudioPage.vue b/frontend-vue/src/views/StudioPage.vue
+index 44f59a5..9069a2f 100644
+--- a/frontend-vue/src/views/StudioPage.vue
++++ b/frontend-vue/src/views/StudioPage.vue
+@@ -239,8 +239,20 @@
+         <!-- 底部提示信息 -->
+         <div class="p-4 border-t border-slate-700 text-sm text-slate-300 flex items-center justify-between flex-wrap gap-2">
+           <div>
+-            <span v-if="mode === 'image23d' && uploadedFileName">上传图片：{{ uploadedFileName }} | </span>
+-            <span v-if="prompt">提示词：<span class="text-slate-400">{{ prompt }}</span></span>
++            <template v-if="mode === 'image23d'">
++              <span class="flex items-center gap-2" v-if="uploadedImage">
++                图片：
++                <img
++                  :src="uploadedImage"
++                  alt="输入图片预览"
++                  class="h-8 w-8 rounded border border-slate-700 object-cover"
++                />
++              </span>
++              <span v-else-if="uploadedFileName">图片：{{ uploadedFileName }}</span>
++            </template>
++            <template v-else>
++              <span v-if="prompt">提示词：<span class="text-slate-400">{{ prompt }}</span></span>
++            </template>
+           </div>
+           <div v-if="creditsUsed != null" class="text-emerald-300">消耗：{{ creditsUsed }} 积分</div>
+         </div>
+
+commit a09179e087ce469cc886fed3ac3d02cdc0b70f0a
+Author: xpp <xpppanxc@outlook.com>
+Date:   Mon Feb 16 00:14:31 2026 +0800
+
+    docker化 v0.7.0可运行版本
+
+diff --git a/frontend-vue/src/views/StudioPage.vue b/frontend-vue/src/views/StudioPage.vue
+new file mode 100644
+index 0000000..44f59a5
+--- /dev/null
++++ b/frontend-vue/src/views/StudioPage.vue
+@@ -0,0 +1,496 @@
++<template>
++  <!-- 造梦页面：支持三种模式（文生图、文生3D、图转3D） -->
++  <div class="page-transition space-y-4">
++    <!-- 顶部功能选择 Tab -->
++    <div class="glass-panel p-1 rounded-xl border border-slate-700 flex gap-1">
++      <button
++        class="flex-1 py-2 px-4 rounded-lg text-sm font-bold transition"
++        :class="mode === 'text2image' ? 'bg-indigo-600 text-white' : 'bg-transparent text-slate-400 hover:text-white'"
++        type="button"
++        @click="mode = 'text2image'"
++      >
++        <i data-lucide="image" class="w-4 h-4 inline-block mr-2"></i>
++        文生图
++      </button>
++      <button
++        class="flex-1 py-2 px-4 rounded-lg text-sm font-bold transition"
++        :class="mode === 'text23d' ? 'bg-indigo-600 text-white' : 'bg-transparent text-slate-400 hover:text-white'"
++        type="button"
++        @click="mode = 'text23d'"
++      >
++        <i data-lucide="box" class="w-4 h-4 inline-block mr-2"></i>
++        文生3D
++      </button>
++      <button
++        class="flex-1 py-2 px-4 rounded-lg text-sm font-bold transition"
++        :class="mode === 'image23d' ? 'bg-indigo-600 text-white' : 'bg-transparent text-slate-400 hover:text-white'"
++        type="button"
++        @click="mode = 'image23d'"
++      >
++        <i data-lucide="upload" class="w-4 h-4 inline-block mr-2"></i>
++        图转3D
++      </button>
++    </div>
++
++    <!-- 主内容区：根据模式显示不同布局 -->
++    <div class="min-h-[70vh] md:min-h-[75vh] lg:min-h-[80vh] flex flex-col md:flex-row gap-4">
++      <!-- 左侧参数面板 -->
++      <section class="w-full md:w-80 glass-panel flex flex-col md:rounded-l-2xl rounded-2xl border border-slate-700 md:border-r-0 overflow-hidden">
++        <div class="p-4 border-b border-slate-700 bg-slate-800/50 flex items-center gap-2">
++          <i :data-lucide="mode === 'image23d' ? 'upload' : 'wand-2'" class="w-4 h-4 text-indigo-400"></i>
++          <h2 class="font-bold text-sm text-slate-100">
++            {{ mode === 'text2image' ? '图片生成参数' : mode === 'text23d' ? '3D模型生成参数' : '图片转3D参数' }}
++          </h2>
++        </div>
++
++        <div class="p-4 overflow-y-auto flex-1 space-y-6">
++          <!-- 文生图 / 文生3D：文本输入 -->
++          <template v-if="mode === 'text2image' || mode === 'text23d'">
++            <!-- 提示词输入 -->
++            <div>
++              <div class="flex justify-between mb-1 items-center">
++                <label class="text-xs font-bold text-slate-400 uppercase">提示词 (Prompt)</label>
++                <button
++                  class="text-xs border border-slate-600 rounded px-1 text-slate-300 hover:text-white hover:bg-white/5 transition"
++                  type="button"
++                  @click="toggleLang"
++                >
++                  中/En
++                </button>
++              </div>
++              <textarea
++                v-model="prompt"
++                class="w-full h-32 bg-slate-900 border border-slate-600 rounded p-2 text-sm resize-none text-slate-200 focus:border-indigo-500 outline-none transition"
++                :placeholder="mode === 'text2image' ? '请输入图片描述，例如：一只穿着宇航服的柴犬，4k画质' : '请输入3D模型描述，例如：一只穿着宇航服的柴犬，4k画质'"
++              ></textarea>
++            </div>
++          </template>
++
++          <!-- 图转3D：图片上传 -->
++          <template v-else>
++            <div>
++              <label class="text-xs font-bold text-slate-400 uppercase mb-2 block">上传图片</label>
++              <div
++                class="border-2 border-dashed border-slate-600 rounded-lg p-8 text-center cursor-pointer hover:border-indigo-500 transition"
++                :class="uploadedImage ? 'border-indigo-500' : ''"
++                @click="triggerFileInput"
++              >
++                <input
++                  ref="fileInput"
++                  type="file"
++                  accept="image/*"
++                  class="hidden"
++                  @change="handleFileUpload"
++                />
++                <div v-if="!uploadedImage">
++                  <i data-lucide="upload-cloud" class="w-12 h-12 text-slate-500 mx-auto mb-2"></i>
++                  <p class="text-sm text-slate-400">点击或拖拽图片到此处</p>
++                  <p class="text-xs text-slate-500 mt-1">支持 JPG、PNG、WEBP 格式</p>
++                </div>
++                <div v-else class="space-y-2">
++                  <img :src="uploadedImage" class="max-h-48 mx-auto rounded-lg border border-slate-700" alt="上传的图片" />
++                  <p class="text-xs text-slate-400">{{ uploadedFileName }}</p>
++                  <button
++                    class="text-xs text-red-400 hover:text-red-300"
++                    type="button"
++                    @click.stop="clearUploadedImage"
++                  >
++                    重新选择
++                  </button>
++                </div>
++              </div>
++            </div>
++
++          </template>
++        </div>
++
++        <!-- 生成按钮 -->
++        <div class="p-4 border-t border-slate-700">
++          <button
++            class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
++            type="button"
++            :disabled="loading || (mode === 'image23d' && !uploadedImage)"
++            @click="generate"
++          >
++            <i data-lucide="zap" class="w-4 h-4"></i>
++            <span>
++              {{
++                loading
++                  ? '生成中...'
++                  : mode === 'text2image'
++                    ? '生成图片 (-10积分)'
++                    : mode === 'text23d'
++                      ? '生成3D模型 (-10积分)'
++                      : '转换3D模型 (-10积分)'
++              }}
++            </span>
++          </button>
++        </div>
++      </section>
++
++      <!-- 右侧结果视图 -->
++      <section class="flex-1 bg-black/40 md:rounded-r-2xl rounded-2xl border border-slate-700 relative overflow-hidden flex flex-col">
++        <!-- 顶部小工具按钮 -->
++        <div class="absolute top-4 left-4 flex gap-2 z-10 pointer-events-none">
++          <button
++            v-if="mode === 'text23d' || mode === 'image23d'"
++            class="bg-slate-800 p-2 rounded text-slate-300 pointer-events-auto border border-slate-600"
++            type="button"
++          >
++            <i data-lucide="rotate-3d" class="w-5 h-5"></i>
++          </button>
++        </div>
++
++        <!-- 空视图 -->
++        <div v-if="view === 'empty'" class="flex-1 flex flex-col items-center justify-center opacity-30">
++          <i :data-lucide="mode === 'text2image' ? 'image' : 'cuboid'" class="w-24 h-24 mb-4"></i>
++          <p>{{ mode === 'text2image' ? '等待生成图片...' : '等待生成3D模型...' }}</p>
++        </div>
++
++        <!-- 加载中 -->
++        <div v-else-if="view === 'loading'" class="flex-1 flex flex-col items-center justify-center">
++          <div class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
++          <p class="text-indigo-400 font-mono">
++            {{ mode === 'text2image' ? 'AI 正在生成高清图片...' : mode === 'text23d' ? 'AI 正在构建3D拓扑结构...' : 'AI 正在将图片转换为3D模型...' }}
++          </p>
++        </div>
++
++        <!-- 结果视图 -->
++        <div v-else class="flex-1 relative group">
++          <!-- 文生图：显示2D图片 -->
++          <template v-if="mode === 'text2image'">
++            <img
++              :src="resultImg"
++              class="w-full h-full object-contain bg-slate-900"
++              alt="生成的图片"
++            />
++            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
++          </template>
++
++          <!-- 文生3D / 图转3D：显示3D模型预览 -->
++          <template v-else>
++            <img
++              v-if="resultImg"
++              :src="resultImg"
++              class="w-full h-full object-contain bg-slate-900"
++              alt="3D模型预览图"
++              @error="(e) => { console.error('预览图加载失败:', resultImg); e.target.style.display = 'none' }"
++            />
++            <div
++              v-else
++              class="flex-1 flex items-center justify-center text-slate-400"
++            >
++              <p>等待生成3D模型预览...</p>
++            </div>
++            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-50 group-hover:opacity-100 transition pointer-events-none"></div>
++          </template>
++
++          <!-- 底部操作按钮 -->
++          <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-4 flex-wrap justify-center">
++            <!-- 文生3D / 图转3D：打印按钮 -->
++            <button
++              v-if="mode === 'text23d' || mode === 'image23d'"
++              class="bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-full font-bold shadow-lg flex justify-center transition transform hover:scale-105"
++              type="button"
++              @click="printJob"
++            >
++              打印
++            </button>
++
++            <!-- 发布到社区 -->
++            <button
++              v-if="assetId && !published"
++              class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-full font-bold shadow-lg flex justify-center transition transform hover:scale-105"
++              type="button"
++              @click="publishToCommunity"
++            >
++              发布到社区
++            </button>
++            <span
++              v-if="assetId && published"
++              class="px-6 py-3 rounded-full font-bold bg-slate-900/70 border border-slate-700 text-emerald-300 flex justify-center"
++            >
++              已发布
++            </span>
++
++            <!-- 下载按钮（文生图） -->
++            <button
++              v-if="mode === 'text2image' && resultImg"
++              class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-full font-bold shadow-lg flex justify-center transition transform hover:scale-105"
++              type="button"
++              @click="downloadImage"
++            >
++              下载图片
++            </button>
++
++            <!-- 查看模型链接（3D） -->
++            <a
++              v-if="(mode === 'text23d' || mode === 'image23d') && resultUrl"
++              class="px-6 py-3 rounded-full font-bold bg-slate-900/70 hover:bg-slate-900 border border-slate-700 flex justify-center"
++              :href="resultUrl"
++              target="_blank"
++              rel="noreferrer"
++            >
++              查看模型链接
++            </a>
++          </div>
++        </div>
++
++        <!-- 底部提示信息 -->
++        <div class="p-4 border-t border-slate-700 text-sm text-slate-300 flex items-center justify-between flex-wrap gap-2">
++          <div>
++            <span v-if="mode === 'image23d' && uploadedFileName">上传图片：{{ uploadedFileName }} | </span>
++            <span v-if="prompt">提示词：<span class="text-slate-400">{{ prompt }}</span></span>
++          </div>
++          <div v-if="creditsUsed != null" class="text-emerald-300">消耗：{{ creditsUsed }} 积分</div>
++        </div>
++
++        <!-- Toast 消息 -->
++        <div
++          v-if="msg"
++          class="absolute left-4 bottom-4 text-sm px-4 py-2 rounded-lg shadow-lg z-20"
++          :class="msgType === 'error' ? 'bg-red-600 text-white' : 'bg-emerald-600 text-white'"
++        >
++          {{ msg }}
++        </div>
++      </section>
++    </div>
++  </div>
++</template>
++
++<script setup lang="ts">
++import { onMounted, ref, watch } from 'vue'
++import { useRoute } from 'vue-router'
++import { api } from '../lib/api'
++import { useAuthStore } from '../stores/auth'
++
++declare const lucide: any
++
++const route = useRoute()
++const auth = useAuthStore()
++
++// 模式：text2image（文生图）、text23d（文生3D）、image23d（图转3D）
++const mode = ref<'text2image' | 'text23d' | 'image23d'>('text23d')
++
++// 从 URL 参数读取模式
++onMounted(() => {
++  const modeParam = route.query.mode as string
++  if (modeParam === 'text2image' || modeParam === 'text23d' || modeParam === 'image23d') {
++    mode.value = modeParam
++  }
++  renderIcons()
++})
++
++watch(mode, () => {
++  renderIcons()
++  // 切换模式时重置状态
++  view.value = 'empty'
++  resultImg.value = ''
++  resultUrl.value = null
++  assetId.value = null
++  published.value = false
++  creditsUsed.value = null
++})
++
++function renderIcons() {
++  if (typeof lucide !== 'undefined' && lucide?.createIcons) {
++    lucide.createIcons()
++  }
++}
++
++const lang = ref<'cn' | 'en'>('cn')
++const promptCn = '一只穿着宇航服的柴犬，4k画质'
++const promptEn = 'A Shiba Inu in a spacesuit, 4k'
++const prompt = ref(promptCn)
++
++// 图转3D相关
++const fileInput = ref<HTMLInputElement | null>(null)
++const uploadedImage = ref<string | null>(null)
++const uploadedFileName = ref<string>('')
++
++const view = ref<'empty' | 'loading' | 'result'>('empty')
++const loading = ref(false)
++const creditsUsed = ref<number | null>(null)
++const resultUrl = ref<string | null>(null)
++const resultImg = ref('')
++const assetId = ref<string | null>(null)
++const published = ref(false)
++
++const msg = ref('')
++const msgType = ref<'ok' | 'error'>('ok')
++
++function toastOk(t: string) {
++  msgType.value = 'ok'
++  msg.value = t
++  setTimeout(() => (msg.value = ''), 2500)
++}
++function toastErr(t: string) {
++  msgType.value = 'error'
++  msg.value = t
++  setTimeout(() => (msg.value = ''), 3500)
++}
++
++function toggleLang() {
++  lang.value = lang.value === 'cn' ? 'en' : 'cn'
++  prompt.value = lang.value === 'cn' ? promptCn : promptEn
++}
++
++
++function triggerFileInput() {
++  fileInput.value?.click()
++}
++
++function handleFileUpload(e: Event) {
++  const target = e.target as HTMLInputElement
++  const file = target.files?.[0]
++  if (!file) return
++
++  if (!file.type.startsWith('image/')) {
++    toastErr('请上传图片文件')
++    return
++  }
++
++  uploadedFileName.value = file.name
++  const reader = new FileReader()
++  reader.onload = (e) => {
++    uploadedImage.value = e.target?.result as string
++  }
++  reader.readAsDataURL(file)
++}
++
++function clearUploadedImage() {
++  uploadedImage.value = null
++  uploadedFileName.value = ''
++  if (fileInput.value) {
++    fileInput.value.value = ''
++  }
++}
++
++async function generate() {
++  // 检查登录状态
++  auth.hydrate()
++  if (!auth.isAuthed) {
++    return toastErr('请先登录后再生成')
++  }
++
++  // 图转3D需要先上传图片
++  if (mode.value === 'image23d' && !uploadedImage.value) {
++    return toastErr('请先上传图片')
++  }
++
++  // 文生图/文生3D需要提示词
++  if ((mode.value === 'text2image' || mode.value === 'text23d') && !prompt.value.trim()) {
++    return toastErr('请输入提示词')
++  }
++
++  loading.value = true
++  view.value = 'loading'
++  creditsUsed.value = null
++  resultUrl.value = null
++  assetId.value = null
++  published.value = false
++
++  try {
++    if (mode.value === 'text2image') {
++      // 文生图：调用阿里云百炼 wan2.6-t2i API
++      const res = await api.studio.generate({
++        prompt: prompt.value,
++        model_config_id: 'wan2.6-t2i' // 指定使用阿里云百炼文生图模型
++      })
++      
++      console.log('✅ 文生图响应:', res)
++      resultImg.value = res.preview_url || res.image_url || ''
++      resultUrl.value = res.image_url || null
++      assetId.value = res.asset_id || null
++      creditsUsed.value = res.credits_used || 10
++      
++      console.log('📊 设置显示数据:', { resultImg: resultImg.value, resultUrl: resultUrl.value })
++      
++      if (!resultImg.value) {
++        toastErr('生成成功但未返回图片URL')
++      } else {
++        toastOk(`图片生成成功（-${creditsUsed.value} 积分）`)
++      }
++    } else if (mode.value === 'text23d') {
++      // 文生3D：调用混元生3D API
++      const res = await api.studio.generate({
++        prompt: prompt.value
++      })
++      
++      console.log('✅ 3D生成响应:', res)
++      resultImg.value = res.preview_url || res.model_url || ''
++      resultUrl.value = res.model_url || null
++      assetId.value = res.asset_id || null
++      creditsUsed.value = res.credits_used || 10
++      
++      console.log('📊 设置显示数据:', { resultImg: resultImg.value, resultUrl: resultUrl.value })
++      
++      if (!resultImg.value) {
++        toastErr('生成成功但未返回预览图URL')
++      } else {
++        toastOk(`3D模型生成成功（-${creditsUsed.value} 积分）`)
++      }
++    } else if (mode.value === 'image23d') {
++      // 图转3D：调用混元生3D API
++      const res = await api.studio.imageTo3D({
++        image_base64: uploadedImage.value!,
++        prompt: prompt.value || undefined
++      })
++      
++      console.log('✅ 图转3D响应:', res)
++      resultImg.value = res.preview_url || res.model_url || ''
++      resultUrl.value = res.model_url || null
++      assetId.value = res.asset_id || null
++      creditsUsed.value = res.credits_used || 10
++      
++      console.log('📊 设置显示数据:', { resultImg: resultImg.value, resultUrl: resultUrl.value })
++      
++      if (!resultImg.value) {
++        toastErr('生成成功但未返回预览图URL')
++      } else {
++        toastOk(`图片转3D成功（-${creditsUsed.value} 积分）`)
++      }
++    }
++
++    view.value = 'result'
++    renderIcons()
++  } catch (e: any) {
++    console.error(e)
++    view.value = 'empty'
++    toastErr(e?.message || '生成失败')
++  } finally {
++    loading.value = false
++  }
++}
++
++function printJob() {
++  toastOk('已发送至打印队列（演示）')
++}
++
++async function publishToCommunity() {
++  if (!assetId.value) return
++  try {
++    const res = await api.assets.publish(assetId.value)
++    published.value = !!res.is_published
++    toastOk(res.message || '发布成功')
++    renderIcons()
++  } catch (e: any) {
++    toastErr(e?.message || '发布失败')
++  }
++}
++
++function downloadImage() {
++  if (!resultImg.value) return
++  const link = document.createElement('a')
++  link.href = resultImg.value
++  link.download = `generated-image-${Date.now()}.jpg`
++  link.click()
++  toastOk('图片下载中...')
++}
++</script>
++
++<style scoped>
++.page-transition {
++  @apply animate-[slideUp_0.3s_cubic-bezier(0.16,1,0.3,1)];
++}
++</style>

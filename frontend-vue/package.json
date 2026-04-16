@@ -1,0 +1,26 @@
+{
+  "name": "ai-soulmate-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "deps:ensure": "node -e \"const deps=['vue','vue-router','vue-i18n','pinia','vite','@vitejs/plugin-vue','vite-plugin-wasm','vite-plugin-top-level-await'];const missing=deps.filter((m)=>{try{return !require.resolve(m)}catch{return true}});if(missing.length){console.log('Missing deps:',missing.join(', '));process.exit(1)}else{console.log('All required deps present')}\" || npm install --include=dev",
+    "dev": "npm run deps:ensure && vite --host 0.0.0.0 --port 8080",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 8080"
+  },
+  "dependencies": {
+    "online-3d-viewer": "^0.18.0",
+    "pinia": "^2.2.0",
+    "vue": "^3.5.0",
+    "vue-i18n": "^9.14.0",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.0",
+    "vite-plugin-top-level-await": "^1.5.0",
+    "vite-plugin-wasm": "^3.4.1"
+  }
+}
