@@ -1,6 +1,6 @@
 # pull-prod-master.ps1
 # Prod: git pull origin master, then docker compose up -d
-# Server: root@59.110.238.204  Project: /home/admin/ai-soulmate
+# Server: 
 # Usage: .\pull-prod-master.ps1
 #        .\pull-prod-master.ps1 -SkipDocker
 #
@@ -20,8 +20,8 @@ param(
     [switch]$SkipDocker
 )
 
-$Server = "root@59.110.238.204"
-$ProjectDir = "/home/admin/ai-soulmate"
+$Server = ""
+$ProjectDir = ""
 
 Write-Host ">>> SSH $Server : backup nginx+clean-docker+vite.config -> pull master -> RESTORE (never keep repo copy) ..."
 
