@@ -56,15 +56,15 @@ services:
       # 支付宝回调地址（需要配置为服务器公网地址）
       # 本地开发: http://localhost:8080/orders/{order_id}
       # 服务器部署: http://your-server-ip:8080/orders/{order_id}
-      ALIPAY_RETURN_URL: "${PUBLIC_BASE_URL:-http://59.110.238.204:8080}/orders"
-      ALIPAY_NOTIFY_URL: "${PUBLIC_BASE_URL:-http://59.110.238.204:8080}/api/payments/alipay/notify"
+      ALIPAY_RETURN_URL: ""
+      ALIPAY_NOTIFY_URL: ""
 
       # 前端地址（用于支付成功后跳转）
-      FRONTEND_URL: "${PUBLIC_BASE_URL:-http://59.110.238.204:8080}"
+      FRONTEND_URL: ""
       # External AI API Constants
       # HUNYUAN3D_API_KEY: ...
       # ALIYUN_BAILIAN_API_KEY: ...
-      # depends_on:  # 已移除本地数据库依赖，使用阿里云 RDS
+      # depends_on:  # 已移除本地数据库依赖，使用云 RDS
       #   db:
       #     condition: service_healthy
     volumes:
