@@ -59,13 +59,13 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
-    # 注入项目根目录 .env（SMTP / GitHub / 阿里云短信等），便于容器内读取
+    # 注入项目根目录 .env（SMTP / GitHub / 云短信等），便于容器内读取
     env_file:
       - .env
     environment:
       # Database connection
-      DATABASE_URL: postgresql://postgres:password@db:5432/ai_soulmate
-      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: 
+      REDIS_URL: 
       # Windows/Docker 下 bind mount 文件变更不触发 inotify，用轮询让 --reload 生效
       WATCHFILES_FORCE_POLLING: "true"
 
