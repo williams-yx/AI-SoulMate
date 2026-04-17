@@ -4,12 +4,12 @@
 # 开发侧配置 (Source)
 # 从环境变量读取，避免将凭据硬编码进仓库
 SOURCE_TOKEN="${SOURCE_TOKEN:-}"
-SOURCE_QQ_EMAIL="3273161867@qq.com" 
-SOURCE_REPO="gitee.com/xppsec/ai-soulmate.git" 
+SOURCE_QQ_EMAIL="" 
+SOURCE_REPO="" 
 
 # 拉取与部署配置
 BRANCH="master"  # 确保拉取当前真正修复了 SQL 文件的 master 分支
-WORKSPACE="/home/admin"
+WORKSPACE=""
 PROJECT_DIR="ai-soulmate"
 # ============================================
 
